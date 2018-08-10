@@ -1,0 +1,50 @@
+{
+   "@odata.context":"https://graph.microsoft.com/v1.0/$metadata#users",
+   "value":[
+      {
+         "id":"12502bbc-5e91-4e08-8de6-2f4163c127d7",
+         "businessPhones":[
+
+         ],
+         "displayName":"Chaitanya Sonavale",
+         "givenName":"Chaitanya",
+         "jobTitle":null,
+         "mail":null,
+         "mobilePhone":null,
+         "officeLocation":null,
+         "preferredLanguage":null,
+         "surname":"Sonavale",
+         "userPrincipalName":"chaitanya.sonavale_synerzip.com#EXT#@synerzipindia.onmicrosoft.com"
+      },
+      {
+         "id":"7887e707-587f-44a7-98a9-002a0ad55580",
+         "businessPhones":[
+
+         ],
+         "displayName":"Pallavi Jadhav",
+         "givenName":"Pallavi",
+         "jobTitle":null,
+         "mail":null,
+         "mobilePhone":null,
+         "officeLocation":null,
+         "preferredLanguage":"en-US",
+         "surname":"Jadhav",
+         "userPrincipalName":"pallavi.jadhav@synerzipindia.onmicrosoft.com"
+      },
+      {
+         "id":"8c09a9d1-f1a2-463b-bd0f-b10c51c437d0",
+         "businessPhones":[
+
+         ],
+         "displayName":"Saket Adhav",
+         "givenName":"Saket",
+         "jobTitle":null,
+         "mail":null,
+         "mobilePhone":null,
+         "officeLocation":null,
+         "preferredLanguage":null,
+         "surname":"Adhav",
+         "userPrincipalName":"saket.adhav@synerzipindia.onmicrosoft.com"
+      }
+   ]
+}

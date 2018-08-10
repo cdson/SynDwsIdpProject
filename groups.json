@@ -1,0 +1,77 @@
+{  
+   "@odata.context":"https://graph.microsoft.com/v1.0/$metadata#groups",
+   "value":[  
+      {  
+         "id":"1986e105-886b-43b3-a1ff-cb2d89e04b9f",
+         "deletedDateTime":null,
+         "classification":null,
+         "createdDateTime":"2018-08-10T09:45:44Z",
+         "creationOptions":[  
+
+         ],
+         "description":"Created for testing",
+         "displayName":"TestGroup2",
+         "groupTypes":[  
+            "Unified"
+         ],
+         "mail":"3d1ddde0e5@synerzipindia.onmicrosoft.com",
+         "mailEnabled":true,
+         "mailNickname":"3d1ddde0e5",
+         "onPremisesLastSyncDateTime":null,
+         "onPremisesProvisioningErrors":[  
+
+         ],
+         "onPremisesSecurityIdentifier":null,
+         "onPremisesSyncEnabled":null,
+         "preferredDataLocation":null,
+         "proxyAddresses":[  
+            "SMTP:3d1ddde0e5@synerzipindia.onmicrosoft.com"
+         ],
+         "renewedDateTime":"2018-08-10T09:45:44Z",
+         "resourceBehaviorOptions":[  
+
+         ],
+         "resourceProvisioningOptions":[  
+
+         ],
+         "securityEnabled":true,
+         "visibility":"Public"
+      },
+      {  
+         "id":"722fd891-fe44-4bd1-b529-963f573ec969",
+         "deletedDateTime":null,
+         "classification":null,
+         "createdDateTime":"2018-08-10T09:45:01Z",
+         "creationOptions":[  
+
+         ],
+         "description":"Created for testing",
+         "displayName":"TestGroup1",
+         "groupTypes":[  
+
+         ],
+         "mail":null,
+         "mailEnabled":false,
+         "mailNickname":"80190851-6924-45af-a56c-a27ddc755c98",
+         "onPremisesLastSyncDateTime":null,
+         "onPremisesProvisioningErrors":[  
+
+         ],
+         "onPremisesSecurityIdentifier":null,
+         "onPremisesSyncEnabled":null,
+         "preferredDataLocation":null,
+         "proxyAddresses":[  
+
+         ],
+         "renewedDateTime":"2018-08-10T09:45:01Z",
+         "resourceBehaviorOptions":[  
+
+         ],
+         "resourceProvisioningOptions":[  
+
+         ],
+         "securityEnabled":true,
+         "visibility":null
+      }
+   ]
+}

@@ -1,0 +1,183 @@
+swagger: '2.0'
+info:
+  title: DWS Tenant registration API
+  description: DWS Tenant registration API
+  version: "1.0.0"
+host: "idtp378"
+basePath: /DWSTenantRegistration
+paths:
+  /tenant:
+    get:
+      tags:
+        - Tenant
+      operationId: TenantGet
+      consumes: []
+      produces: []
+      summary: "Get tenant By Name and ID"
+      description: "Pass in a tenant name OR id as a input paramter"
+      parameters:
+        - name: name
+          in: query
+          description: "Tenant name to be provided here"
+          required: false
+          type: string
+        - name: uid
+          in: query
+          description: "Tenant ID to be provided here"
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Successful retrieval of an existing tenant.
+        '204':
+          description: No Content - The query is successful, but the system is unable to find a tenant matching the unique name or identifier.
+        '400':
+          description: Bad Request - Invalid query filter.
+        '500':
+          description: Internal Server Error - An unexpected error occurred while trying to process the request.
+    post:
+      tags:
+        - Tenant
+      operationId: TenantPost
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      summary: "Create (add) a new Tenant."
+      description: "This requires a unique name for the Tenant"
+      parameters:
+        - name: tenantInfo
+          in: body
+          description: "  Pass in a unique name for the Tenant"
+          required: false
+          schema:
+            $ref: '#/definitions/TenantCreationDto'
+      responses:
+        '202':
+          description: "Accepted - Request is successfully accepted and queued for processing. A location header in the response provides the URI to the queued task."
+        '400':
+          description: "Bad Request – Invalid payload."
+        '409':
+          description: "Conflict - A tenant with the specified unique name already exists in the system."
+        '500':
+          description: "Internal Server Error – An unforeseeable error has occurred."
+  '/tenant/queue/{token}':
+    get:
+      tags:
+        - Tenant
+      operationId: TenantQueueByTokenGet
+      consumes: []
+      produces: []
+      summary: "Gets the status of a request."
+      parameters:
+        - name: token
+          in: path
+          description: "Pass in a Token of Tenant"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK - Request is not completed, or failed. Parse the JSON payload for status information.
+        '303':
+          description: See Other - The request completed successfully. The location header returns the URI to the definitive resource.
+        '404':
+          description: Not Found – Request not found.
+        '500':
+          description: Internal Server Error – An unforeseeable error has occurred.
+  '/tenant/{tenant_uid}/{state}':
+    post:
+      tags:
+        - Tenant
+      operationId: TenantByTenant_uidByStatePost
+      consumes: []
+      produces: []
+      summary: Updates the state of an existing tenant.
+      description: "This requires a unique id and state for the Tenant"
+      parameters:
+        - name: tenant_uid
+          in: path
+          description: "Pass in a unique id for the Tenant"
+          required: true
+          type: string
+        - name: state
+          in: path
+          description: "Pass in a state for the Tenant"
+          required: true
+          type: string
+      responses:
+        '202':
+          description: Accepted - Request is accepted and queued for processing. A location header in the response provides the URI to the queued task.
+        '400':
+          description: Bad Request - Invalid action or state transition. Current valid actions are “activate”, “warn”, “suspend” and “terminate”.
+        '404':
+          description: Not Found – The tenant does not exist.
+        '500':
+          description: Internal Server Error - An unexpected error occurred while trying to process the request.
+  '/tenant/{tenant_uid}/subscription':
+    post:
+      tags:
+        - Tenant
+      operationId: TenantByTenant_uidSubscriptionPost
+      consumes:
+        - application/json-patch+json
+        - application/json
+        - text/json
+        - application/*+json
+      produces: []
+      summary: Add or delete a subscription from an existing Tenant.
+      parameters:
+        - name: tenant_uid
+          in: path
+          description: "Pass in a unique id for the Tenant subscription"
+          required: true
+          type: string
+        - name: subscriptionInfo
+          in: body
+          description: "Pass in a actio (Add or delete), sku, seatcount for the Tenant subscription"
+          required: false
+          schema:
+            $ref: '#/definitions/TenantSubscriptionDto'
+      responses:
+        '202':
+          description: Accepted - Request is successfully accepted and queued for processing. A location header in the response provides the URI to the queued task.
+        '400':
+          description: Bad Request – Invalid payload.
+        '409':
+          description: Conflict – A subscription action could not be performed.
+        '404':
+          description: Not Found – The tenant does not exist.
+        '500':
+          description: Internal Server Error – An unforeseeable error has occurred.
+definitions:
+  TenantCreationDto:
+    required:
+      - name
+      - setupAdmin
+    type: object
+    properties:
+      name:
+        maxLength: 50
+        minLength: 0
+        pattern: '^[a-zA-Z0-9\s_,]*$'
+        type: string
+      properName:
+        type: string
+      setupAdmin:
+        type: string
+  TenantSubscriptionDto:
+    required:
+      - id
+      - action
+    type: object
+    properties:
+      id:
+        type: string
+      action:
+        type: string
+      sku:
+        type: string
+      seatCount:
+        format: int32
+        type: integer

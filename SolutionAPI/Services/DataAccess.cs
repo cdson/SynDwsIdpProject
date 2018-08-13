@@ -33,5 +33,27 @@ namespace SolutionAPI.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<List<User>> GetUsers()
+        {
+            return Task.Run(() => MockedDataForUser.AllUsers);
+        }
+
+        public Task<User> GetUserById(int id)
+        {
+            var user = MockedDataForUser.AllUsers.SingleOrDefault(i => i.UserId == id);
+            return Task.Run(() => user);
+        }
+
+        public Task<List<Group>> GetGroups()
+        {
+            return Task.Run(() => MockedDataForGroup.AllGroups);
+        }
+
+        public Task<Group> GetGroupById(int id)
+        {
+            var group = MockedDataForGroup.AllGroups.SingleOrDefault(i => i.Id == id);
+            return Task.Run(() => group);
+        }
     }
 }

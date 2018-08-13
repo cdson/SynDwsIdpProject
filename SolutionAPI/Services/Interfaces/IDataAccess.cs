@@ -18,6 +18,10 @@ namespace SolutionAPI.Services
         /// <param name="sku"></param>
         /// <returns>List<SolutionProvider></returns>
         Task<List<SolutionProvider>> GetSolutionProvidersForSKU(string sku);
+        Task<List<User>> GetUsers();
+        Task<User> GetUserById(int id);
+        Task<List<Group>> GetGroups();
+        Task<Group> GetGroupById(int id);
 
     }
 }

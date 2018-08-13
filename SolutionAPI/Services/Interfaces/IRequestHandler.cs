@@ -8,6 +8,10 @@ namespace SolutionAPI.Services
     public interface IRequestHandler
     {
         Task<List<SolutionProvider>> GetSolutionProvidersForSKU(string sku);
+        Task<List<User>> GetUsers();
+        Task<User> GetUserById(int id);
+        Task<List<Group>> GetGroups();
+        Task<Group> GetGroupById(int id);
     }
 
     

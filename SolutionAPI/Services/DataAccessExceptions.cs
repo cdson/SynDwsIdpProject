@@ -19,4 +19,38 @@ namespace SolutionAPI.Services
             Sku = sku ?? string.Empty;
         }
     }
+
+    public class UserNotFoundException : Exception
+    {
+        public string UserId { get; private set; }
+
+        public UserNotFoundException()
+            : base("No users found")
+        {
+
+        }
+
+        public UserNotFoundException(string userId)
+            : base("No user found for UserId")
+        {
+            UserId = userId ?? string.Empty;
+        }
+    }
+
+    public class GroupNotFoundException : Exception
+    {
+        public string GroupId { get; private set; }
+
+        public GroupNotFoundException()
+            : base("No groups found")
+        {
+
+        }
+
+        public GroupNotFoundException(string groupId)
+            : base("No group found for groupId")
+        {
+            GroupId = groupId ?? string.Empty;
+        }
+    }
 }

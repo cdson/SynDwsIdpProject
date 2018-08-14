@@ -75,6 +75,7 @@ namespace SolutionAPI.Controllers
         private bool IsValidGuid(string guid)
         {
             return Guid.TryParse(guid, out Guid guidOut);
+			
         }
 
     }

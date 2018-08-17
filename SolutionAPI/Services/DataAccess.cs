@@ -34,7 +34,7 @@ namespace SolutionAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> GetUsers()
+        public Task<List<User>> GetUsers(string filter, UserSearchModel option)
         {
             return Task.Run(() => MockedDataForUser.AllUsers);
         }
@@ -45,7 +45,7 @@ namespace SolutionAPI.Services
             return Task.Run(() => user);
         }
 
-        public Task<List<Group>> GetGroups()
+        public Task<List<Group>> GetGroups(string filter, GroupSearchModel option)
         {
             return Task.Run(() => MockedDataForGroup.AllGroups);
         }

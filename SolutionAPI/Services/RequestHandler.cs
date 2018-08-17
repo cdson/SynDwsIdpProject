@@ -20,18 +20,18 @@ namespace SolutionAPI.Services
             return await dataAccess.GetSolutionProvidersForSKU(sku);
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<User>> GetUsers(string filter, UserSearchModel option)
         {
-            return await dataAccess.GetUsers();
+            return await dataAccess.GetUsers(filter, option);
         }
 
         public async Task<User> GetUserById(int id)
         {
             return await dataAccess.GetUserById(id);
         }
-        public async Task<List<Group>> GetGroups()
+        public async Task<List<Group>> GetGroups(string filter, GroupSearchModel option)
         {
-            return await dataAccess.GetGroups();
+            return await dataAccess.GetGroups(filter, option);
         }
 
         public async Task<Group> GetGroupById(int id)

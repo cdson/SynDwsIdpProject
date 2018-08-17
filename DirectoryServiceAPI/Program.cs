@@ -10,7 +10,7 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace SolutionAPI
+namespace DirectoryServiceAPI
 {
     public class Program
     {

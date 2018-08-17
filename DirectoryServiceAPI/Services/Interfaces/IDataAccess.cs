@@ -6,9 +6,9 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Models;
 
-namespace SolutionAPI.Services
+namespace DirectoryServiceAPI.Services
 {
     public interface IDataAccess
     {

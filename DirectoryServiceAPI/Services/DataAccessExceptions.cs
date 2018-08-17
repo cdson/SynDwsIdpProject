@@ -5,9 +5,9 @@
  */
 
 using System;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Models;
 
-namespace SolutionAPI.Services
+namespace DirectoryServiceAPI.Services
 {
     public class SolutionProvidersNotFoundException : Exception
     {

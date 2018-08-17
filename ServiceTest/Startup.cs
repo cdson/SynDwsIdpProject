@@ -8,8 +8,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using SolutionAPI.Models;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 
 namespace ServiceTest
 {

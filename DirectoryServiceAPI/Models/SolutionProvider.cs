@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SolutionAPI.Models
+namespace DirectoryServiceAPI.Models
 {
     public class SolutionProvider
     {

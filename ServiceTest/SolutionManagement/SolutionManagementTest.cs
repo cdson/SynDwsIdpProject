@@ -13,9 +13,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using SolutionAPI.Controllers;
-using SolutionAPI.Models;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Controllers;
+using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 
 namespace ServiceTest.SolutionManagement
 {
@@ -36,7 +36,7 @@ namespace ServiceTest.SolutionManagement
         public void Initialize()
         {
             server = new TestServer(new WebHostBuilder()
-                    .UseStartup<SolutionAPI.Startup>()
+                    .UseStartup<DirectoryServiceAPI.Startup>()
                     .UseConfiguration(Configuration));
             client = server.CreateClient();
         }

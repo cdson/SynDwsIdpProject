@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using SolutionAPI.Models;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 
-namespace SolutionAPI.Controllers
+namespace DirectoryServiceAPI.Controllers
 {
     [Produces("application/json")]
     [Route("Directory")]

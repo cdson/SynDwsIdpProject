@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolutionAPI\SolutionAPI.csproj" />
+    <ProjectReference Include="..\DirectoryServiceAPI\DirectoryServiceAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

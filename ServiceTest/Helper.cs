@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Models;
 using System.Collections.Generic;
 
 namespace ServiceTest

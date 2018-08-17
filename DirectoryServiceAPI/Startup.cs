@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Models;
 using System.Threading.Tasks;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Services;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace SolutionAPI
+namespace DirectoryServiceAPI
 {
     public class Startup
     {

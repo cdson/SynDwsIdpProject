@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolutionAPI\SolutionAPI.csproj" />
+    <Folder Include="Handlers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\" />
+    <ProjectReference Include="..\DirectoryServiceAPI\DirectoryServiceAPI.csproj" />
   </ItemGroup>
 
 </Project>

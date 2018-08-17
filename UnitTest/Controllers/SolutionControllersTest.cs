@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using Moq;
 using Microsoft.Extensions.Logging;
-using SolutionAPI.Controllers;
-using SolutionAPI.Services;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Controllers;
+using DirectoryServiceAPI.Services;
+using DirectoryServiceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
 using System.Threading.Tasks;

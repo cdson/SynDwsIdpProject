@@ -59,14 +59,14 @@ namespace SolutionAPI.Controllers
         }
 
         //directory/users
-        [Route("users/{filter?}/{option?}")]
+        [Route("users/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [HttpGet(Name = RouteNames.Users)]
-        public async Task<IActionResult> GetUsers(string filter = null, UserSearchModel option = null)
+        public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             List<User> objUsers = null;
             try
             {
-                objUsers = await requestHandler.GetUsers(filter, option);
+                objUsers = await requestHandler.GetUsers(filter, startIndex, count, sortBy);
 
                 if (objUsers == null)
                 {
@@ -117,14 +117,14 @@ namespace SolutionAPI.Controllers
         }
 
         //directory/groups
-        [Route("groups/{filter?}/{option?}")]
+        [Route("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [HttpGet(Name = RouteNames.Groups)]
-        public async Task<IActionResult> GetGroups(string filter = null, GroupSearchModel option = null)
+        public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             List<Group> objGroups = null;
             try
             {
-                objGroups = await requestHandler.GetGroups(filter, option);
+                objGroups = await requestHandler.GetGroups(filter, startIndex, count, sortBy);
 
                 if (objGroups == null)
                 {

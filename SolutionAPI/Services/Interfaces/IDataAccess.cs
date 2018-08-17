@@ -18,9 +18,9 @@ namespace SolutionAPI.Services
         /// <param name="sku"></param>
         /// <returns>List<SolutionProvider></returns>
         Task<List<SolutionProvider>> GetSolutionProvidersForSKU(string sku);
-        Task<List<User>> GetUsers(string filter, UserSearchModel option);
+        Task<List<User>> GetUsers(string filter, int? startIndex, int? count, string sortBy);
         Task<User> GetUserById(int id);
-        Task<List<Group>> GetGroups(string filter, GroupSearchModel option);
+        Task<List<Group>> GetGroups(string filter, int? startIndex, int? count, string sortBy);
         Task<Group> GetGroupById(int id);
 
     }

@@ -14,9 +14,9 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
 using Serilog;
-using DirectoryServiceAPI.Models;
+using SolutionAPI.Models;
 
-namespace DirectoryServiceAPI.Services
+namespace SolutionAPI.Services
 {
     public class DataAccess : IDataAccess
     {

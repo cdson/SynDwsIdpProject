@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DirectoryServiceAPI.Models;
+using SolutionAPI.Models;
 
-namespace DirectoryServiceAPI.Services
+namespace SolutionAPI.Services
 {
     public class RequestHandler : IRequestHandler
     {

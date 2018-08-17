@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using DirectoryServiceAPI.Models;
+using SolutionAPI.Models;
 using System.Collections.Generic;
 
-namespace DirectoryServiceAPI.Services
+namespace SolutionAPI.Services
 {
     public interface IRequestHandler
     {

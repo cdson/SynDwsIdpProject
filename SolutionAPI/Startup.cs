@@ -37,7 +37,7 @@ namespace SolutionAPI
             services.AddSingleton(appSettings);
             //  Injection Config
             services.AddSingleton<IDataAccess, DataAccess>();
-            services.AddSingleton<IRequestHandler, RequestHandler>();
+            services.AddSingleton<IADFactory, ConcreteADFactory>();
 
             // Code to generate OpenAPI documentation for swagger
             // Comment out this on production

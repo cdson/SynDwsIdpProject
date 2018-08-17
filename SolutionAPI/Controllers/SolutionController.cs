@@ -46,7 +46,8 @@ namespace SolutionAPI.Controllers
                         Log.Warning($"SKU provided to GetSolutionProvidersForSku does not meet our restrictions. sku: '{sku}'");
                         return BadRequest();
                     }
-                    objSolutionProvider = await requestHandler.GetSolutionProvidersForSKU(sku);
+                    //objSolutionProvider = await requestHandler.GetSolutionProvidersForSKU(sku);
+                    
                 }
                 else
                 {

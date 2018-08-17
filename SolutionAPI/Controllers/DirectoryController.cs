@@ -22,11 +22,11 @@ namespace SolutionAPI.Controllers
             public const string GroupById = nameof(GroupById);
         }
 
-        private readonly IRequestHandler requestHandler;
+        private readonly IADFactory _factory;
 
-        public DirectoryController(IRequestHandler requestHandler)
+        public DirectoryController(IADFactory factory)
         {
-            this.requestHandler = requestHandler;
+            _factory = factory;
         }
 
         //directory/users/{id}
@@ -37,7 +37,10 @@ namespace SolutionAPI.Controllers
             User objUser = null;
             try
             {
-                objUser = await requestHandler.GetUserById(id);
+                IRequestHandler azureObj = _factory.GetIAM();
+                objUser = await azureObj.GetUserById(id);
+
+                //objUser = await requestHandler.GetUserById(id);
 
                 if (objUser == null)
                 {
@@ -66,7 +69,9 @@ namespace SolutionAPI.Controllers
             List<User> objUsers = null;
             try
             {
-                objUsers = await requestHandler.GetUsers();
+                //ADFactory factory = new ConcreteADFactory();
+                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
+                //objUsers = await azureObj.GetUsers();
 
                 if (objUsers == null)
                 {
@@ -95,7 +100,9 @@ namespace SolutionAPI.Controllers
             Group objGroup = null;
             try
             {
-                objGroup = await requestHandler.GetGroupById(id);
+                //ADFactory factory = new ConcreteADFactory();
+                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
+                //objGroup = await azureObj.GetGroupById(id);
 
                 if (objGroup == null)
                 {
@@ -124,7 +131,9 @@ namespace SolutionAPI.Controllers
             List<Group> objGroups = null;
             try
             {
-                objGroups = await requestHandler.GetGroups();
+                //ADFactory factory = new ConcreteADFactory();
+                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
+                //objGroups = await azureObj.GetGroups();
 
                 if (objGroups == null)
                 {

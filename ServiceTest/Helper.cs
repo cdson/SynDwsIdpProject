@@ -8,11 +8,11 @@ namespace ServiceTest
 {
     public static class Helper
     {
-        #region Tenant Subscriptions Test cases
-        internal static async Task<List<SolutionProvider>> GetSolutionProvidersForSKURequestAsync(string sku)
-        {
-            return await Startup.DataAccess.GetSolutionProvidersForSKU(sku);
-        }
-        #endregion 
+        //#region Tenant Subscriptions Test cases
+        //internal static async Task<List<SolutionProvider>> GetSolutionProvidersForSKURequestAsync(string sku)
+        //{
+        //    return await Startup.DataAccess.GetSolutionProvidersForSKU(sku);
+        //}
+        //#endregion 
     }
 }

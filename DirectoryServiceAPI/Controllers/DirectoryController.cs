@@ -8,6 +8,7 @@ using Serilog;
 using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
 
+
 namespace DirectoryServiceAPI.Controllers
 {
     [Produces("application/json")]
@@ -22,37 +23,35 @@ namespace DirectoryServiceAPI.Controllers
             public const string GroupById = nameof(GroupById);
         }
 
-        private readonly IADFactory _factory;
+        private readonly IADFactory factory;
 
         public DirectoryController(IADFactory factory)
         {
-            _factory = factory;
+            this.factory = factory;
         }
 
         //directory/users/{id}
         [Route("users/{id}")]
         [HttpGet("{id}", Name = RouteNames.UserById)]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetUser(string id)
         {
             User objUser = null;
             try
             {
-                IRequestHandler azureObj = _factory.GetIAM();
-                objUser = await azureObj.GetUserById(id);
-
-                //objUser = await requestHandler.GetUserById(id);
+                IADHandler azureObj = factory.GetIAM();
+                objUser = await azureObj.GetUser(id);
 
                 if (objUser == null)
                 {
                     Log.Warning("No user found.");
-                    throw new UserNotFoundException(id.ToString());
+                    throw new UserNotFoundException(id);
                 }
                 return Ok(objUser);
             }
             catch (UserNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return NoContent();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -63,17 +62,14 @@ namespace DirectoryServiceAPI.Controllers
 
         //directory/users
         [Route("users/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
-        [Route("users")]
-        [HttpGet(Name = RouteNames.Users)]
         [HttpGet(Name = RouteNames.Users)]
         public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
-            List<User> objUsers = null;
+            UserResources objUsers = null;
             try
             {
-                //ADFactory factory = new ConcreteADFactory();
-                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
-                //objUsers = await azureObj.GetUsers();
+                IADHandler azureObj = factory.GetIAM();
+                objUsers = await azureObj.GetUsers(filter, startIndex, count, sortBy);
 
                 if (objUsers == null)
                 {
@@ -97,26 +93,25 @@ namespace DirectoryServiceAPI.Controllers
         //directory/groups/{id}
         [Route("groups/{id}")]
         [HttpGet("{id}", Name = RouteNames.GroupById)]
-        public async Task<IActionResult> GetGroupById(int id)
+        public async Task<IActionResult> GetGroup(string id)
         {
             Group objGroup = null;
             try
             {
-                //ADFactory factory = new ConcreteADFactory();
-                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
-                //objGroup = await azureObj.GetGroupById(id);
+                IADHandler azureObj = factory.GetIAM();
+                objGroup = await azureObj.GetGroup(id);
 
                 if (objGroup == null)
                 {
                     Log.Warning("No group found.");
-                    throw new GroupNotFoundException(id.ToString());
+                    throw new GroupNotFoundException(id);
                 }
                 return Ok(objGroup);
             }
             catch (GroupNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return NoContent();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -126,19 +121,15 @@ namespace DirectoryServiceAPI.Controllers
         }
 
         //directory/groups
-        //directory/groups
         [Route("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
-        [Route("groups")]
-        [HttpGet(Name = RouteNames.Groups)]
         [HttpGet(Name = RouteNames.Groups)]
         public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
-            List<Group> objGroups = null;
+            GroupResources objGroups = null;
             try
             {
-                //ADFactory factory = new ConcreteADFactory();
-                //IRequestHandler azureObj = factory.GetIAM("AzureAD");
-                //objGroups = await azureObj.GetGroups();
+                IADHandler azureObj = factory.GetIAM();
+                objGroups = await azureObj.GetGroups(filter, startIndex, count, sortBy);
 
                 if (objGroups == null)
                 {

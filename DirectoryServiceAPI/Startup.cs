@@ -18,8 +18,6 @@ namespace DirectoryServiceAPI
 {
     public class Startup
     {
-        private DatabaseSettings dbSettings;
-        private AppSettings appSettings;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,11 +30,7 @@ namespace DirectoryServiceAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
-            services.AddSingleton(dbSettings);
-            services.AddSingleton(appSettings);
             //  Injection Config
-            services.AddSingleton<IDataAccess, DataAccess>();
             services.AddSingleton<IADFactory, ConcreteADFactory>();
 
             // Code to generate OpenAPI documentation for swagger
@@ -88,8 +82,7 @@ namespace DirectoryServiceAPI
 
         private void InitializeConfiguration()
         {
-            dbSettings = DatabaseSettings.InitializeSettings(Configuration);
-            appSettings = AppSettings.InitializeSettings(Configuration);
+            //ToDo
         }
     }
 }

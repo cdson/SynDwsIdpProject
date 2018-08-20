@@ -7,12 +7,15 @@ namespace DirectoryServiceAPI.Models
 {
     public class Group
     {
-        public int Id { get; set; }
-        public string DisplayName { get; set; }
+        public string id { get; set; }
+        public string displayName { get; set; }
     }
 
-    public class MockedDataForGroup
+    public class GroupResources
     {
-        public static List<Group> AllGroups = new List<Group>() { new Group { Id = 1, DisplayName = "Test group 1" }, new Group { Id = 2, DisplayName = "Test group 2" }};
+        public int itemsPerPage { get; set; }
+        public int startIndex { get; set; }
+        public int totalResults { get; set; }
+        public List<Group> resources { get; set; }
     }
 }

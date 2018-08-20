@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
-using DirectoryServiceAPI.Services.Interfaces;
+
 
 namespace DirectoryServiceAPI.Controllers
 {

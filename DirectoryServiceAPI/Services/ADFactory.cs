@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DirectoryServiceAPI.Services.Interfaces;
 
-namespace DirectoryServiceAPI.Models
+
+namespace DirectoryServiceAPI.Services
 {
   
     public class ConcreteADFactory : IADFactory //Concrete Creator

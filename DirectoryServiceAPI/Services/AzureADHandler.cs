@@ -1,10 +1,11 @@
-﻿using DirectoryServiceAPI.Services;
+﻿using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DirectoryServiceAPI.Models
+namespace DirectoryServiceAPI.Services
 {
     public class AzureADHandler : IADHandler //Concrete Product , similar such product classes can be added
     {

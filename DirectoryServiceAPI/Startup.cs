@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using DirectoryServiceAPI.Services;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
-using DirectoryServiceAPI.Services.Interfaces;
 
 namespace DirectoryServiceAPI
 {

@@ -7,7 +7,7 @@ namespace DirectoryServiceAPI.Models
 {
     public class Group
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string displayName { get; set; }
     }
 

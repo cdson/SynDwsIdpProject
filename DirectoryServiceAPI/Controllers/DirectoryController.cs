@@ -33,13 +33,13 @@ namespace DirectoryServiceAPI.Controllers
         //directory/users/{id}
         [Route("users/{id}")]
         [HttpGet("{id}", Name = RouteNames.UserById)]
-        public async Task<IActionResult> getUser(string id)
+        public async Task<IActionResult> GetUser(string id)
         {
             User objUser = null;
             try
             {
                 IADHandler azureObj = factory.GetIAM();
-                objUser = await azureObj.getUser(id);
+                objUser = await azureObj.GetUser(id);
 
                 if (objUser == null)
                 {
@@ -51,7 +51,7 @@ namespace DirectoryServiceAPI.Controllers
             catch (UserNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                throw new UserNotFoundException(id);
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -63,13 +63,13 @@ namespace DirectoryServiceAPI.Controllers
         //directory/users
         [Route("users/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [HttpGet(Name = RouteNames.Users)]
-        public async Task<IActionResult> getUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
+        public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             UserResources objUsers = null;
             try
             {
                 IADHandler azureObj = factory.GetIAM();
-                objUsers = await azureObj.getUsers(filter, startIndex, count, sortBy);
+                objUsers = await azureObj.GetUsers(filter, startIndex, count, sortBy);
 
                 if (objUsers == null)
                 {
@@ -93,13 +93,13 @@ namespace DirectoryServiceAPI.Controllers
         //directory/groups/{id}
         [Route("groups/{id}")]
         [HttpGet("{id}", Name = RouteNames.GroupById)]
-        public async Task<IActionResult> getGroup(string id)
+        public async Task<IActionResult> GetGroup(string id)
         {
             Group objGroup = null;
             try
             {
                 IADHandler azureObj = factory.GetIAM();
-                objGroup = await azureObj.getGroup(id);
+                objGroup = await azureObj.GetGroup(id);
 
                 if (objGroup == null)
                 {
@@ -111,7 +111,7 @@ namespace DirectoryServiceAPI.Controllers
             catch (GroupNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                throw new GroupNotFoundException(id);
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -123,13 +123,13 @@ namespace DirectoryServiceAPI.Controllers
         //directory/groups
         [Route("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [HttpGet(Name = RouteNames.Groups)]
-        public async Task<IActionResult> getGroup(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
+        public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             GroupResources objGroups = null;
             try
             {
                 IADHandler azureObj = factory.GetIAM();
-                objGroups = await azureObj.getGroups(filter, startIndex, count, sortBy);
+                objGroups = await azureObj.GetGroups(filter, startIndex, count, sortBy);
 
                 if (objGroups == null)
                 {

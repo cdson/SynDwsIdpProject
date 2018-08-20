@@ -9,22 +9,22 @@ namespace DirectoryServiceAPI.Services
 {
     public class AzureADHandler : IADHandler //Concrete Product , similar such product classes can be added
     {
-        public async Task<User> getUser(string id)
+        public async Task<User> GetUser(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserResources> getUsers(string filter, int? startIndex, int? count, string sortBy)
+        public Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Group> getGroup(string id)
+        public async Task<Group> GetGroup(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GroupResources> getGroups(string filter, int? startIndex, int? count, string sortBy)
+        public Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy)
         {
             throw new NotImplementedException();
         }

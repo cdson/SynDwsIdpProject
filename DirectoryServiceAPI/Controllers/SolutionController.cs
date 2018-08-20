@@ -10,11 +10,11 @@ using Serilog;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SolutionAPI.Models;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 using System.Collections.Generic;
 
-namespace SolutionAPI.Controllers
+namespace DirectoryServiceAPI.Controllers
 {
     [Route("solution")]
     [Produces("application/json")]

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SolutionAPI.Models;
+using DirectoryServiceAPI.Models;
 
-namespace SolutionAPI.Services
+namespace DirectoryServiceAPI.Services
 {
     //public class RequestHandler : IRequestHandler //Concrete Product
     //{

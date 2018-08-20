@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using SolutionAPI.Models;
-using SolutionAPI.Services;
+using DirectoryServiceAPI.Models;
+using DirectoryServiceAPI.Services;
 
-namespace SolutionAPI.Controllers
+namespace DirectoryServiceAPI.Controllers
 {
     [Produces("application/json")]
     [Route("Directory")]
@@ -62,9 +62,11 @@ namespace SolutionAPI.Controllers
         }
 
         //directory/users
+        [Route("users/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [Route("users")]
         [HttpGet(Name = RouteNames.Users)]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet(Name = RouteNames.Users)]
+        public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             List<User> objUsers = null;
             try
@@ -124,9 +126,12 @@ namespace SolutionAPI.Controllers
         }
 
         //directory/groups
+        //directory/groups
+        [Route("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
         [Route("groups")]
         [HttpGet(Name = RouteNames.Groups)]
-        public async Task<IActionResult> GetGroups()
+        [HttpGet(Name = RouteNames.Groups)]
+        public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             List<Group> objGroups = null;
             try

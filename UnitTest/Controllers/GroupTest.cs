@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Moq;
-using System.Collections.Generic;
 using DirectoryServiceAPI.Services;
 using DirectoryServiceAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;

@@ -19,7 +19,7 @@ namespace UnitTest.Controllers
         public void UsersNotFound204()
         {
             Mock<IADHandler> v = new Mock<IADHandler>();
-            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new UserNotFoundException(null));
+            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new UserNotFoundException(null));
 
             Mock<IADFactory> mockFactory = new Mock<IADFactory>();
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
@@ -34,7 +34,7 @@ namespace UnitTest.Controllers
         public void InternalServerError()
         {
             Mock<IADHandler> v = new Mock<IADHandler>();
-            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new Exception());
+            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception());
 
             Mock<IADFactory> mockFactory = new Mock<IADFactory>();
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
@@ -52,7 +52,7 @@ namespace UnitTest.Controllers
             expected.resources = new List<User>() { new User() { id = "1", email = "abc@abc.com", givenName = "abc", surname = "abc", userPrincipalName = "abc" }, new User() { id = "2", email = "abc@abc.com", givenName = "abc", surname = "abc", userPrincipalName = "abc" } };
 
             Mock<IADHandler> v = new Mock<IADHandler>();
-            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ReturnsAsync(expected);
+            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(expected);
 
             Mock<IADFactory> mockFactory = new Mock<IADFactory>();
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);

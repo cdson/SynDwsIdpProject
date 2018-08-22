@@ -8,7 +8,7 @@ namespace DirectoryServiceAPI.Services
     public interface IADHandler
     {
         Task<User> GetUser(string id);
-        Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy);
+        Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy, string userId = null);
         Task<Group> GetGroup(string id);
         Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy);
     }

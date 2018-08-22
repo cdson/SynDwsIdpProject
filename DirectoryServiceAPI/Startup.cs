@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using DirectoryServiceAPI.Services;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using DirectoryServiceAPI.Extensions;
 
 namespace DirectoryServiceAPI
 {
@@ -25,13 +28,33 @@ namespace DirectoryServiceAPI
         }
 
         public IConfiguration Configuration { get; }
+        public const string ObjectIdentifierType = "http://schemas.microsoft.com/identity/claims/objectidentifier";
+        public const string TenantIdType = "http://schemas.microsoft.com/identity/claims/tenantid";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddAzureAd(options => Configuration.Bind("AzureAd", options))
+            .AddCookie();
+
+
             services.AddMvc();
+
+            // This sample uses an in-memory cache for tokens and subscriptions. Production apps will typically use some method of persistent storage.
+            services.AddMemoryCache();
+            services.AddSession();
+            // Add application services.
+            services.AddSingleton<IGraphAuthProvider, GraphAuthProvider>();
+            services.AddTransient<IGraphSdkHelper, GraphSdkHelper>();
             //  Injection Config
-            services.AddSingleton<IADFactory, ConcreteADFactory>();
+            services.AddSingleton<IADFactory, ADFactory>();
+
 
             // Code to generate OpenAPI documentation for swagger
             // Comment out this on production
@@ -65,6 +88,10 @@ namespace DirectoryServiceAPI
             {
                 app.UseExceptionHandler();
             }
+
+            app.UseStaticFiles();
+            app.UseAuthentication();
+
 
             app.UseStatusCodePages();
             app.UseMvc();

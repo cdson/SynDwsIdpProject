@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 namespace DirectoryServiceAPI.Controllers
@@ -15,6 +20,7 @@ namespace DirectoryServiceAPI.Controllers
     [Route("Directory")]
     public class DirectoryController : Controller
     {
+        #region Graph Api
         internal static class RouteNames
         {
             public const string Users = nameof(Users);
@@ -38,8 +44,11 @@ namespace DirectoryServiceAPI.Controllers
             User objUser = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objUser = await azureObj.GetUser(id);
+                if (User.Identity.IsAuthenticated)
+                {
+                    IADHandler adHandler = factory.GetIAM();
+                    objUser = await adHandler.GetUser(id);
+                }
 
                 if (objUser == null)
                 {
@@ -68,8 +77,14 @@ namespace DirectoryServiceAPI.Controllers
             UserResources objUsers = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objUsers = await azureObj.GetUsers(filter, startIndex, count, sortBy);
+                if (User.Identity.IsAuthenticated)
+                {
+                    // Get user's id for token cache.
+                    var identifier = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
+
+                    IADHandler adHandler = factory.GetIAM();
+                    objUsers = await adHandler.GetUsers(filter, startIndex, count, sortBy, identifier);
+                }
 
                 if (objUsers == null)
                 {
@@ -98,8 +113,8 @@ namespace DirectoryServiceAPI.Controllers
             Group objGroup = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objGroup = await azureObj.GetGroup(id);
+                IADHandler adHandler = factory.GetIAM();
+                objGroup = await adHandler.GetGroup(id);
 
                 if (objGroup == null)
                 {
@@ -128,8 +143,8 @@ namespace DirectoryServiceAPI.Controllers
             GroupResources objGroups = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objGroups = await azureObj.GetGroups(filter, startIndex, count, sortBy);
+                IADHandler adHandler = factory.GetIAM();
+                objGroups = await adHandler.GetGroups(filter, startIndex, count, sortBy);
 
                 if (objGroups == null)
                 {
@@ -149,5 +164,71 @@ namespace DirectoryServiceAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
+
+
+        #region Account api
+
+        [Route("load")]
+        public IActionResult Load()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var identity = User.Identity as ClaimsIdentity; // Azure AD V2 endpoint specific
+                string preferred_username = identity.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+                string name = identity.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+                string userId = User.FindFirst(Startup.ObjectIdentifierType)?.Value;
+
+                return RedirectToAction("GetUser", new { id = userId });
+                //return $"Welcome {name} {preferred_username}";
+            }
+
+            //return "Not Authenticated...";
+            return RedirectToAction("error");
+        }
+
+
+        [Route("signin")]
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            var redirectUrl = Url.Action("Load", "Directory");
+            return Challenge(
+                new AuthenticationProperties { RedirectUri = redirectUrl },
+                OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+
+        [Route("signout")]
+        [HttpGet]
+        public IActionResult SignOut()
+        {
+            var callbackUrl = Url.Action(nameof(SignedOut), "Directory", values: null, protocol: Request.Scheme);
+            return SignOut(
+                new AuthenticationProperties { RedirectUri = callbackUrl },
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        [Route("signedout")]
+        [HttpGet]
+        public string SignedOut()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+
+                return $"You are successfully signed out.";
+            }
+
+            return $"You are not authenticated";
+        }
+
+
+        [Route("error")]
+        public string Error(string errorMsg)
+        {
+            return $"{errorMsg}";
+        }
+        #endregion
     }
 }

@@ -7,11 +7,17 @@ using System.Linq;
 namespace DirectoryServiceAPI.Services
 {
   
-    public class ConcreteADFactory : IADFactory //Concrete Creator
+    public class ADFactory : IADFactory //Concrete Creator
     {
+        private readonly IGraphService graphService;
+        public ADFactory(IGraphService graphService)
+        {
+            this.graphService = graphService;
+        }
+
         public IADHandler GetIAM()
         {
-            return new AzureADHandler();
+            return new AzureADHandler(graphService);
 
             //switch (Ad) // get this from parameter
             //{

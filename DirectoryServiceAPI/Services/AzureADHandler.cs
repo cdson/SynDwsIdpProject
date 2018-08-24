@@ -9,14 +9,28 @@ namespace DirectoryServiceAPI.Services
 {
     public class AzureADHandler : IADHandler //Concrete Product , similar such product classes can be added
     {
-        public async Task<User> GetUser(string id)
+        private readonly IGraphService graphService;
+        public AzureADHandler(IGraphService graphService)
         {
-            throw new NotImplementedException();
+            this.graphService = graphService;
         }
 
-        public Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
+        public async Task<User> GetUser(string id)
         {
-            throw new NotImplementedException();
+            User objUser = new User();
+
+            objUser = await graphService.GetUser(id);
+
+            return objUser;
+        }
+
+        public async Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
+        {
+            UserResources users = new UserResources();
+
+            users = await graphService.GetUsers(filter, startIndex, count, sortBy);
+
+            return users;
         }
 
         public async Task<Group> GetGroup(string id)

@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
-
+//using Microsoft.AspNetCore.Authorization;
 
 namespace DirectoryServiceAPI.Controllers
 {
     [Produces("application/json")]
     [Route("Directory")]
+    //[Authorize]
     public class DirectoryController : Controller
     {
         internal static class RouteNames
@@ -30,16 +31,15 @@ namespace DirectoryServiceAPI.Controllers
             this.factory = factory;
         }
 
-        //directory/users/{id}
-        [Route("users/{id}")]
-        [HttpGet("{id}", Name = RouteNames.UserById)]
+
+        [HttpGet("users/{id}", Name = RouteNames.UserById)]
         public async Task<IActionResult> GetUser(string id)
         {
             User objUser = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objUser = await azureObj.GetUser(id);
+                IADHandler adHandler = factory.GetIAM();
+                objUser = await adHandler.GetUser(id);
 
                 if (objUser == null)
                 {
@@ -60,16 +60,15 @@ namespace DirectoryServiceAPI.Controllers
             }
         }
 
-        //directory/users
-        [Route("users/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
-        [HttpGet(Name = RouteNames.Users)]
+
+        [HttpGet("users/{filter?}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
         public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             UserResources objUsers = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objUsers = await azureObj.GetUsers(filter, startIndex, count, sortBy);
+                IADHandler adHandler = factory.GetIAM();
+                objUsers = await adHandler.GetUsers(filter, startIndex, count, sortBy);
 
                 if (objUsers == null)
                 {
@@ -90,16 +89,15 @@ namespace DirectoryServiceAPI.Controllers
             }
         }
 
-        //directory/groups/{id}
-        [Route("groups/{id}")]
-        [HttpGet("{id}", Name = RouteNames.GroupById)]
+
+        [HttpGet("groups/{id}", Name = RouteNames.GroupById)]
         public async Task<IActionResult> GetGroup(string id)
         {
             Group objGroup = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objGroup = await azureObj.GetGroup(id);
+                IADHandler adHandler = factory.GetIAM();
+                objGroup = await adHandler.GetGroup(id);
 
                 if (objGroup == null)
                 {
@@ -120,16 +118,16 @@ namespace DirectoryServiceAPI.Controllers
             }
         }
 
-        //directory/groups
-        [Route("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}")]
-        [HttpGet(Name = RouteNames.Groups)]
+
+
+        [HttpGet("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}",Name = RouteNames.Groups)]
         public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             GroupResources objGroups = null;
             try
             {
-                IADHandler azureObj = factory.GetIAM();
-                objGroups = await azureObj.GetGroups(filter, startIndex, count, sortBy);
+                IADHandler adHandler = factory.GetIAM();
+                objGroups = await adHandler.GetGroups(filter, startIndex, count, sortBy);
 
                 if (objGroups == null)
                 {
@@ -149,5 +147,6 @@ namespace DirectoryServiceAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
     }
 }

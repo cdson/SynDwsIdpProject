@@ -31,7 +31,10 @@ namespace DirectoryServiceAPI
         {
             services.AddMvc();
             //  Injection Config
-            services.AddSingleton<IADFactory, ConcreteADFactory>();
+            services.AddSingleton<IADFactory, ADFactory>();
+            services.AddSingleton<IGraphClient, GraphClient>();
+            services.AddSingleton<IGraphService, GraphService>();
+
 
             // Code to generate OpenAPI documentation for swagger
             // Comment out this on production

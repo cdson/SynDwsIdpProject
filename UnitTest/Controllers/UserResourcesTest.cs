@@ -25,7 +25,7 @@ namespace UnitTest.Controllers
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
 
             DirectoryController cn = new DirectoryController(mockFactory.Object);
-            IActionResult response = cn.GetUsers().Result;
+            IActionResult response = cn.GetUsers(null).Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status204NoContent, ((StatusCodeResult)response).StatusCode);
         }
@@ -40,7 +40,7 @@ namespace UnitTest.Controllers
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
 
             DirectoryController cn = new DirectoryController(mockFactory.Object);
-            IActionResult response = cn.GetUsers().Result;
+            IActionResult response = cn.GetUsers(null).Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status500InternalServerError, ((StatusCodeResult)response).StatusCode);
         }
@@ -58,7 +58,7 @@ namespace UnitTest.Controllers
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
 
             DirectoryController cn = new DirectoryController(mockFactory.Object);
-            OkObjectResult response = cn.GetUsers().Result as OkObjectResult;
+            OkObjectResult response = cn.GetUsers(null).Result as OkObjectResult;
             expected.Should().BeEquivalentTo(response.Value);
         }
     }

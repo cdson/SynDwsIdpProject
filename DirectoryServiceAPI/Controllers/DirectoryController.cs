@@ -61,8 +61,8 @@ namespace DirectoryServiceAPI.Controllers
         }
 
 
-        [HttpGet("users/{filter?}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
-        public async Task<IActionResult> GetUsers(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
+        [HttpGet("users/{filter}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
+        public async Task<IActionResult> GetUsers(string filter, int? startIndex = null, int? count = null, string sortBy = null)
         {
             UserResources objUsers = null;
             try

@@ -12,7 +12,7 @@ namespace DirectoryServiceAPI.Services
     {
         private GraphServiceClient graphClient;
 
-        ////access these from appsetting.json
+        //TODO//access these from appsetting.json
         private static string clientId = $"e9a97d45-1fc8-49c0-aaf2-baa7337749d7";
         private static string clientSecret = $"oTfUEBJGN9yPyce4A3Z/7Gk60IYqfn4EUm0LHOdZVis=";
         private static string tenantId = $"6d8173a5-e794-43d6-b2cc-d7704238aa56";

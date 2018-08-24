@@ -42,11 +42,11 @@ namespace DirectoryServiceAPI.Services
 
             // Initialize the GraphServiceClient.
             GraphServiceClient client = await graphClient.GetGraphServiceClient();
-            // Load user profile.
-            var userList = await client.Users.Request().GetAsync();
+
+            var userList = await client.Users.Request().Filter($"{filter}").GetAsync();
 
             //TODO//write common code tp copy proeprties of Microsoft.Graph.User to dto object
-            foreach(var user in userList)
+            foreach (var user in userList)
             {
                 Models.User objUser = new Models.User();
 
@@ -58,8 +58,9 @@ namespace DirectoryServiceAPI.Services
 
                 users.resources.Add(objUser);
             }
-            users.totalResults = users.resources.Count;
 
+
+            users.totalResults = users.resources.Count;
 
             return users;
         }

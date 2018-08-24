@@ -51,7 +51,7 @@ namespace DirectoryServiceAPI.Controllers
             catch (UserNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return StatusCode(StatusCodes.Status404NotFound);
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace DirectoryServiceAPI.Controllers
             catch (UserNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return NoContent();
+                return BadRequest();
             }
             catch (Exception ex)
             {

@@ -17,20 +17,34 @@ namespace DirectoryServiceAPI.Services
 
         public async Task<User> GetUser(string id)
         {
-            User objUser = new User();
+            try
+            {
+                User objUser = new User();
 
-            objUser = await graphService.GetUser(id);
+                objUser = await graphService.GetUser(id);
 
-            return objUser;
+                return objUser;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
         {
-            UserResources users = new UserResources();
+            try
+            {
+                UserResources users = new UserResources();
 
-            users = await graphService.GetUsers(filter, startIndex, count, sortBy);
+                users = await graphService.GetUsers(filter, startIndex, count, sortBy);
 
-            return users;
+                return users;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<Group> GetGroup(string id)

@@ -1,4 +1,6 @@
-﻿using Microsoft.Graph;
+﻿using DirectoryServiceAPI.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Graph;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Collections.Generic;
@@ -11,36 +13,51 @@ namespace DirectoryServiceAPI.Services
     public class GraphClient : IGraphClient
     {
         private GraphServiceClient graphClient;
+        private IConfiguration configuration;
 
-        //TODO//access these from appsetting.json
-        private static string clientId = $"e9a97d45-1fc8-49c0-aaf2-baa7337749d7";
-        private static string clientSecret = $"oTfUEBJGN9yPyce4A3Z/7Gk60IYqfn4EUm0LHOdZVis=";
-        private static string tenantId = $"6d8173a5-e794-43d6-b2cc-d7704238aa56";
-        private static string aadInstance = $"https://login.microsoftonline.com/";
-        private static string graphResource = $"https://graph.microsoft.com/";
+        private string clientId;
+        private string clientSecret;
+        private string tenantId;
+        private string aadInstance;
+        private string graphResource;
+        private string graphAPIEndpoint;
+        private string authority;
 
+
+        public GraphClient(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+
+            // Set AzureAD options
+            SetAzureADOptions();
+        }
 
         public async Task<GraphServiceClient> GetGraphServiceClient()
         {
-            var graphAPIEndpoint = $"{graphResource}v1.0";
-
-            var accessToken = await GetAccessToken();
-
-            graphClient = new GraphServiceClient(graphAPIEndpoint, new DelegateAuthenticationProvider(
-                async requestMessage =>
-                {
-                    // Append the access token to the request
-                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.ToString());
-                }));
+            // Get Access Token and Microsoft Graph Client using access token and microsoft graph v1.0 endpoint
+            var delegateAuthProvider = await GetAuthProvider();
+            // Initializing the GraphServiceClient
+            graphClient = new GraphServiceClient(graphAPIEndpoint, delegateAuthProvider);
 
             return graphClient;
         }
 
-        private async Task<string> GetAccessToken()
+        private void SetAzureADOptions()
         {
-            string authority = String.Concat(aadInstance, tenantId);
+            var azureOptions = new AzureAD();
+            configuration.Bind("AzureAD", azureOptions);
 
+            clientId = azureOptions.ClientId;
+            clientSecret = azureOptions.ClientSecret;
+            tenantId = azureOptions.TenantId;
+            aadInstance = azureOptions.Instance;
+            graphResource = azureOptions.GraphResource;
+            graphAPIEndpoint = $"{graphResource}v1.0";
+            authority = String.Concat(aadInstance, tenantId);
+        }
 
+        private async Task<IAuthenticationProvider> GetAuthProvider()
+        {
             AuthenticationContext authenticationContext = new AuthenticationContext(authority);
             ClientCredential clientCred = new ClientCredential(clientId, clientSecret);
 
@@ -48,7 +65,13 @@ namespace DirectoryServiceAPI.Services
             AuthenticationResult authenticationResult = await authenticationContext.AcquireTokenAsync(graphResource, clientCred);
             var token = authenticationResult.AccessToken;
 
-            return token;
+            var delegateAuthProvider = new DelegateAuthenticationProvider((requestMessage) =>
+            {
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token.ToString());
+                return Task.FromResult(0);
+            });
+
+            return delegateAuthProvider;
         }
     }
 }

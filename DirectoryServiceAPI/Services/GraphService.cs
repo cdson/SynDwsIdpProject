@@ -1,4 +1,5 @@
-﻿using DirectoryServiceAPI.Models;
+﻿using DirectoryServiceAPI.Helpers;
+using DirectoryServiceAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using System;
@@ -22,16 +23,12 @@ namespace DirectoryServiceAPI.Services
 
             // Initialize the GraphServiceClient.
             GraphServiceClient client = await graphClient.GetGraphServiceClient();
+
             // Load user profile.
             var user = await client.Users[id].Request().GetAsync();
 
-            //TODO//write common code tp copy proeprties of Microsoft.Graph.User to dto object
-            objUser.id = user.Id;
-            objUser.givenName = user.GivenName;
-            objUser.surname = user.Surname;
-            objUser.userPrincipalName = user.UserPrincipalName;
-            objUser.email = user.Mail;
-
+            // Copy Microsoft User to DTO User
+            objUser = CopyHandler.PropertyCopy(user);
 
             return objUser;
         }
@@ -44,24 +41,17 @@ namespace DirectoryServiceAPI.Services
             // Initialize the GraphServiceClient.
             GraphServiceClient client = await graphClient.GetGraphServiceClient();
 
+            // Load users profiles.
             var userList = await client.Users.Request().Filter($"{filter}").GetAsync();
 
-            //TODO//write common code tp copy proeprties of Microsoft.Graph.User to dto object
+            // Copy Microsoft User to DTO User
             foreach (var user in userList)
             {
-                Models.User objUser = new Models.User();
-
-                objUser.id = user.Id;
-                objUser.givenName = user.GivenName;
-                objUser.surname = user.Surname;
-                objUser.userPrincipalName = user.UserPrincipalName;
-                objUser.email = user.Mail;
-
+                var objUser = CopyHandler.PropertyCopy(user);
                 users.resources.Add(objUser);
             }
-
-
             users.totalResults = users.resources.Count;
+
 
             return users;
         }

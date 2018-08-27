@@ -27,6 +27,17 @@ namespace DirectoryServiceAPI.Services
         }
     }
 
+    public class UserBadRequestException : Exception
+    {
+        public string UserId { get; private set; }
+
+        public UserBadRequestException()
+            : base("Bad Request")
+        {
+
+        }
+    }
+
     public class GroupNotFoundException : Exception
     {
         public string GroupId { get; private set; }

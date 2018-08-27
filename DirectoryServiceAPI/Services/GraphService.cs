@@ -2,6 +2,7 @@
 using DirectoryServiceAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,41 +20,82 @@ namespace DirectoryServiceAPI.Services
 
         public async Task<Models.User> GetUser(string id)
         {
-            Models.User objUser = new Models.User();
+            try
+            {
+                Models.User objUser = new Models.User();
 
-            // Initialize the GraphServiceClient.
-            GraphServiceClient client = await graphClient.GetGraphServiceClient();
+                // Initialize the GraphServiceClient.
+                GraphServiceClient client = await graphClient.GetGraphServiceClient();
 
-            // Load user profile.
-            var user = await client.Users[id].Request().GetAsync();
+                // Load user profile.
+                var user = await client.Users[id].Request().GetAsync();
 
-            // Copy Microsoft User to DTO User
-            objUser = CopyHandler.PropertyCopy(user);
+                // Copy Microsoft User to DTO User
+                objUser = CopyHandler.PropertyCopy(user);
 
-            return objUser;
+                return objUser;
+            }
+            catch (ServiceException ex)
+            {
+                if (ex.StatusCode.ToString().ToLower() == "notfound")
+                {
+                    Log.Warning("No user found.");
+                    throw new UserNotFoundException(id);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
         }
 
         public async Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
         {
-            UserResources users = new UserResources();
-            users.resources = new List<Models.User>();
-
-            // Initialize the GraphServiceClient.
-            GraphServiceClient client = await graphClient.GetGraphServiceClient();
-
-            // Load users profiles.
-            var userList = await client.Users.Request().Filter($"{filter}").GetAsync();
-
-            // Copy Microsoft User to DTO User
-            foreach (var user in userList)
+            try
             {
-                var objUser = CopyHandler.PropertyCopy(user);
-                users.resources.Add(objUser);
+                UserResources users = new UserResources();
+                users.resources = new List<Models.User>();
+
+                // Initialize the GraphServiceClient.
+                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+
+                // Load users profiles.
+                var userList = await client.Users.Request().Filter($"{filter}").GetAsync();
+
+                // Copy Microsoft User to DTO User
+                foreach (var user in userList)
+                {
+                    var objUser = CopyHandler.PropertyCopy(user);
+                    users.resources.Add(objUser);
+                }
+                users.totalResults = users.resources.Count;
+
+
+                if (users.totalResults == 0)
+                {
+                    Log.Warning("No user found.");
+                    throw new UserNotFoundException();
+                }
+
+                return users;
             }
-            users.totalResults = users.resources.Count;
-
-
-            return users;
+            catch (ServiceException ex)
+            {
+                if (ex.StatusCode.ToString().ToLower() == "badrequest")
+                {
+                    Log.Warning("bad request.");
+                    throw new UserBadRequestException();
+                }
+                else if (ex.StatusCode.ToString().ToLower() == "notfound")
+                {
+                    Log.Warning("No user found.");
+                    throw new UserNotFoundException();
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
         }
 
         public async Task<Models.Group> GetGroup(string id)

@@ -38,20 +38,19 @@ namespace DirectoryServiceAPI.Controllers
             User objUser = null;
             try
             {
+                if(string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+                {
+                    return BadRequest();
+                }
+
                 IADHandler adHandler = factory.GetIAM();
                 objUser = await adHandler.GetUser(id);
-
-                if (objUser == null)
-                {
-                    Log.Warning("No user found.");
-                    throw new UserNotFoundException(id);
-                }
                 return Ok(objUser);
             }
             catch (UserNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return StatusCode(StatusCodes.Status204NoContent);
+                return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -69,15 +68,14 @@ namespace DirectoryServiceAPI.Controllers
             {
                 IADHandler adHandler = factory.GetIAM();
                 objUsers = await adHandler.GetUsers(filter, startIndex, count, sortBy);
-
-                if (objUsers == null)
-                {
-                    Log.Warning("No users found.");
-                    throw new UserNotFoundException();
-                }
                 return Ok(objUsers);
             }
             catch (UserNotFoundException ex)
+            {
+                Log.Warning(ex, ex.Message);
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (UserBadRequestException ex)
             {
                 Log.Warning(ex, ex.Message);
                 return BadRequest();

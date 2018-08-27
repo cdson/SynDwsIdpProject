@@ -22,12 +22,10 @@ namespace DirectoryServiceAPI.Services
         private string graphResource;
         private string graphAPIEndpoint;
         private string authority;
-
-
+        
         public GraphClient(IConfiguration configuration)
         {
             this.configuration = configuration;
-
             // Set AzureAD options
             SetAzureADOptions();
         }
@@ -52,7 +50,7 @@ namespace DirectoryServiceAPI.Services
             tenantId = azureOptions.TenantId;
             aadInstance = azureOptions.Instance;
             graphResource = azureOptions.GraphResource;
-            graphAPIEndpoint = $"{graphResource}v1.0";
+            graphAPIEndpoint = $"{azureOptions.GraphResource}{azureOptions.GraphResourceEndPoint}";
             authority = String.Concat(aadInstance, tenantId);
         }
 

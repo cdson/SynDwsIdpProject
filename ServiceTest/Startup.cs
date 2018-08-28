@@ -1,54 +1,51 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
+using System.Net.Http;
+using Serilog;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ServiceTest
 {
     [SetUpFixture]
     public class Startup
     {
-        //public static IDataAccess DataAccess;
-        //[OneTimeSetUp]
-        //public void Initialize()
-        //{
-        //    IConfiguration configuration = new ConfigurationBuilder()
-        //    .SetBasePath(Directory.GetCurrentDirectory())
-        //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        //    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-        //    .AddEnvironmentVariables()
-        //    .Build();
+        public static HttpClient Client;
+        private static IConfiguration Configuration;
 
-        //    DatabaseSettings dbSettings = InitializeDbSettings(configuration);
-        //    AppSettings appSettings = InitializeAppSettings(configuration);
-        //    DataAccess = new DataAccess(dbSettings, appSettings);
-        //}
+        [OneTimeSetUp]
+        public void Initialize()
+        {
 
-        //private DatabaseSettings InitializeDbSettings(IConfiguration configuration)
-        //{
-        //    DatabaseSettings settings = new DatabaseSettings();
-        //    configuration.Bind("Database", settings);
+            Configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
 
-        //    return settings;
-        //}
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .ReadFrom.Configuration(Configuration)
+                .WriteTo.Console()
+                .CreateLogger();
 
-        //private AppSettings InitializeAppSettings(IConfiguration configuration)
-        //{
-        //    AppSettings settings = new AppSettings();
-        //    configuration.Bind("AppSettings", settings);
+            Client = InitializeServer();
+        }
 
-        //    return settings;
-        //}
-
-
-
+        public static HttpClient InitializeServer()
+        {
+            TestServer server = new TestServer(new WebHostBuilder()
+                   .ConfigureTestServices(s => s.AddSingleton<IADFactory, ADFactory>())
+                   .ConfigureTestServices(s => s.AddSingleton<IGraphClient, GraphClient>())
+                   .ConfigureTestServices(s => s.AddSingleton<IGraphService, GraphService>())
+                   .UseStartup<DirectoryServiceAPI.Startup>()
+                   .UseConfiguration(Configuration));
+            return server.CreateClient();
+        }
     }
 }

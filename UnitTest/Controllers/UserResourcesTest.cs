@@ -61,5 +61,20 @@ namespace UnitTest.Controllers
             OkObjectResult response = cn.GetUsers(null).Result as OkObjectResult;
             expected.Should().BeEquivalentTo(response.Value);
         }
+
+        [Test]
+        public void BadRequest()
+        {
+            Mock<IADHandler> v = new Mock<IADHandler>();
+            v.Setup(k => k.GetUsers(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new UserBadRequestException());
+
+            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
+            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
+
+            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            IActionResult response = cn.GetUsers("test eq saket").Result;
+            Assert.IsInstanceOf<StatusCodeResult>(response);
+            Assert.AreEqual(StatusCodes.Status400BadRequest, ((StatusCodeResult)response).StatusCode);
+        }
     }
 }

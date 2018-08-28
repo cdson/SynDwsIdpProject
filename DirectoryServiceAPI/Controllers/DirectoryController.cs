@@ -61,7 +61,9 @@ namespace DirectoryServiceAPI.Controllers
 
 
         //TODO//filter should be optional parameter. need a fix for swagger.
-        [HttpGet("users/{filter}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
+        //[HttpGet("users/{filter}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
+        [HttpGet]
+        [Route("users")]
         public async Task<IActionResult> GetUsers(string filter, int? startIndex = null, int? count = null, string sortBy = null)
         {
             UserResources objUsers = null;
@@ -118,7 +120,9 @@ namespace DirectoryServiceAPI.Controllers
 
 
 
-        [HttpGet("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}",Name = RouteNames.Groups)]
+        //[HttpGet("groups/{filter?}/{startIndex?}/{count?}/{sortBy?}",Name = RouteNames.Groups)]
+        [HttpGet]
+        [Route("groups")]
         public async Task<IActionResult> GetGroups(string filter = null, int? startIndex = null, int? count = null, string sortBy = null)
         {
             GroupResources objGroups = null;

@@ -60,6 +60,7 @@ namespace DirectoryServiceAPI.Controllers
         }
 
 
+        //TODO//filter should be optional parameter. need a fix for swagger.
         [HttpGet("users/{filter}/{startIndex?}/{count?}/{sortBy?}", Name = RouteNames.Users)]
         public async Task<IActionResult> GetUsers(string filter, int? startIndex = null, int? count = null, string sortBy = null)
         {
@@ -94,14 +95,13 @@ namespace DirectoryServiceAPI.Controllers
             Group objGroup = null;
             try
             {
+                if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+                {
+                    return BadRequest();
+                }
+
                 IADHandler adHandler = factory.GetIAM();
                 objGroup = await adHandler.GetGroup(id);
-
-                if (objGroup == null)
-                {
-                    Log.Warning("No group found.");
-                    throw new GroupNotFoundException(id);
-                }
                 return Ok(objGroup);
             }
             catch (GroupNotFoundException ex)
@@ -126,18 +126,17 @@ namespace DirectoryServiceAPI.Controllers
             {
                 IADHandler adHandler = factory.GetIAM();
                 objGroups = await adHandler.GetGroups(filter, startIndex, count, sortBy);
-
-                if (objGroups == null)
-                {
-                    Log.Warning("No groups found.");
-                    throw new GroupNotFoundException();
-                }
                 return Ok(objGroups);
             }
             catch (GroupNotFoundException ex)
             {
                 Log.Warning(ex, ex.Message);
-                return NoContent();
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (UserBadRequestException ex)
+            {
+                Log.Warning(ex, ex.Message);
+                return BadRequest();
             }
             catch (Exception ex)
             {

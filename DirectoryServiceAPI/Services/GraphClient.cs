@@ -30,16 +30,6 @@ namespace DirectoryServiceAPI.Services
             SetAzureADOptions();
         }
 
-        public async Task<GraphServiceClient> GetGraphServiceClient()
-        {
-            // Get Access Token and Microsoft Graph Client using access token and microsoft graph v1.0 endpoint
-            var delegateAuthProvider = await GetAuthProvider();
-            // Initializing the GraphServiceClient
-            graphClient = new GraphServiceClient(graphAPIEndpoint, delegateAuthProvider);
-
-            return graphClient;
-        }
-
         private void SetAzureADOptions()
         {
             var azureOptions = new AzureAD();
@@ -51,8 +41,19 @@ namespace DirectoryServiceAPI.Services
             aadInstance = azureOptions.Instance;
             graphResource = azureOptions.GraphResource;
             graphAPIEndpoint = $"{azureOptions.GraphResource}{azureOptions.GraphResourceEndPoint}";
-            authority = String.Concat(aadInstance, tenantId);
+            authority = $"{aadInstance}{tenantId}";
         }
+
+        public async Task<GraphServiceClient> GetGraphServiceClient()
+        {
+            // Get Access Token and Microsoft Graph Client using access token and microsoft graph v1.0 endpoint
+            var delegateAuthProvider = await GetAuthProvider();
+            // Initializing the GraphServiceClient
+            graphClient = new GraphServiceClient(graphAPIEndpoint, delegateAuthProvider);
+
+            return graphClient;
+        }
+
 
         private async Task<IAuthenticationProvider> GetAuthProvider()
         {

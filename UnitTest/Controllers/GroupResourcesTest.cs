@@ -17,7 +17,7 @@ namespace UnitTest.Controllers
     public class GroupResourcesTest
     {
         [Test]
-        public void GroupsNotFound404()
+        public void GroupsNotFound204()
         {
             Mock<IADHandler> v = new Mock<IADHandler>();
             v.Setup(k => k.GetGroups(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new GroupNotFoundException(null));

@@ -8,7 +8,7 @@ namespace DirectoryServiceAPI.Helpers
 {
     public class CopyHandler
     {
-        public static User PropertyCopy(Microsoft.Graph.User graphUser)
+        public static User UserProperty(Microsoft.Graph.User graphUser)
         {
             User user = new User();
             user.id = graphUser.Id;
@@ -18,6 +18,15 @@ namespace DirectoryServiceAPI.Helpers
             user.email = graphUser.Mail;
 
             return user;
+        }
+
+        public static Group GroupProperty(Microsoft.Graph.Group graphGroup)
+        {
+            Group group = new Group();
+            group.id = graphGroup.Id;
+            group.displayName = graphGroup.DisplayName;
+
+            return group;
         }
     }
 }

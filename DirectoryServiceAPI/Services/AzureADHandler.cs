@@ -17,26 +17,30 @@ namespace DirectoryServiceAPI.Services
 
         public async Task<User> GetUser(string id)
         {
-                User objUser = new User();
-                objUser = await graphService.GetUser(id);
-                return objUser;
+            User objUser = new User();
+            objUser = await graphService.GetUser(id);
+            return objUser;
         }
 
         public async Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy)
         {
-                UserResources users = new UserResources();
-                users = await graphService.GetUsers(filter, startIndex, count, sortBy);
-                return users;
+            UserResources users = new UserResources();
+            users = await graphService.GetUsers(filter, startIndex, count, sortBy);
+            return users;
         }
 
-        public Task<Group> GetGroup(string id)
+        public async Task<Group> GetGroup(string id)
         {
-            throw new NotImplementedException();
+            Group objGroup = new Group();
+            objGroup = await graphService.GetGroup(id);
+            return objGroup;
         }
 
-        public Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy)
+        public async Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy)
         {
-            throw new NotImplementedException();
+            GroupResources groups = new GroupResources();
+            groups = await graphService.GetGroups(filter, startIndex, count, sortBy);
+            return groups;
         }
     }
 }

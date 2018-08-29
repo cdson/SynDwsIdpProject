@@ -30,16 +30,16 @@ namespace DirectoryServiceAPI.Services
                 // Load user profile.
                 var user = await client.Users[id].Request().GetAsync();
 
-                // Copy Microsoft User to DTO User
-                objUser = CopyHandler.PropertyCopy(user);
+                // Copy Microsoft-Graph User to DTO User
+                objUser = CopyHandler.UserProperty(user);
 
                 return objUser;
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower() == "notfound")
+                if (ex.StatusCode.ToString().ToLower().Equals("notfound")) ////"error":{"code": "Request_ResourceNotFound"}////
                 {
-                    Log.Warning("No user found.");
+                    Log.Warning(ex.Message);
                     throw new UserNotFoundException(id);
                 }
                 else
@@ -65,7 +65,7 @@ namespace DirectoryServiceAPI.Services
                 // Copy Microsoft User to DTO User
                 foreach (var user in userList)
                 {
-                    var objUser = CopyHandler.PropertyCopy(user);
+                    var objUser = CopyHandler.UserProperty(user);
                     users.resources.Add(objUser);
                 }
                 users.totalResults = users.resources.Count;
@@ -81,14 +81,14 @@ namespace DirectoryServiceAPI.Services
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower() == "badrequest")
+                if (ex.StatusCode.ToString().ToLower().Equals("badrequest"))
                 {
-                    Log.Warning("bad request.");
+                    Log.Warning(ex.Message);
                     throw new UserBadRequestException();
                 }
-                else if (ex.StatusCode.ToString().ToLower() == "notfound")
+                else if (ex.StatusCode.ToString().ToLower().Equals("notfound"))
                 {
-                    Log.Warning("No user found.");
+                    Log.Warning(ex.Message);
                     throw new UserNotFoundException();
                 }
                 else
@@ -100,12 +100,82 @@ namespace DirectoryServiceAPI.Services
 
         public async Task<Models.Group> GetGroup(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Models.Group objGroup = new Models.Group();
+
+                // Initialize the GraphServiceClient.
+                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+
+                // Load group profile.
+                var group = await client.Groups[id].Request().GetAsync();
+
+                // Copy Microsoft-Graph Group to DTO Group
+                objGroup = CopyHandler.GroupProperty(group);
+
+                return objGroup;
+            }
+            catch (ServiceException ex)
+            {
+                if (ex.StatusCode.ToString().ToLower().Equals("badrequest")) ////"error":{"code": "Request_BadRequest"}////
+                {
+                    Log.Warning(ex.Message);
+                    throw new GroupNotFoundException(id);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
         }
 
-        public Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy)
+        public async Task<GroupResources> GetGroups(string filter, int? startIndex, int? count, string sortBy)
         {
-            throw new NotImplementedException();
+            try
+            {
+                GroupResources groups = new GroupResources();
+                groups.resources = new List<Models.Group>();
+
+                // Initialize the GraphServiceClient.
+                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+
+                // Load groups profiles.
+                var groupList = await client.Groups.Request().Filter($"{filter}").GetAsync();
+
+                // Copy Microsoft-Graph Group to DTO Group
+                foreach (var group in groupList)
+                {
+                    var objGroup = CopyHandler.GroupProperty(group);
+                    groups.resources.Add(objGroup);
+                }
+                groups.totalResults = groups.resources.Count;
+
+
+                if (groups.totalResults == 0)
+                {
+                    Log.Warning("No group found.");
+                    throw new GroupNotFoundException();
+                }
+
+                return groups;
+            }
+            catch (ServiceException ex)
+            {
+                if (ex.StatusCode.ToString().ToLower().Equals("badrequest"))
+                {
+                    Log.Warning(ex.Message);
+                    throw new GroupBadRequestException();
+                }
+                else if (ex.StatusCode.ToString().ToLower().Equals("notfound"))
+                {
+                    Log.Warning(ex.Message);
+                    throw new GroupNotFoundException();
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
         }
     }
 }

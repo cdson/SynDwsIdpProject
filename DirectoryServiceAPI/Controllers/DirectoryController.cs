@@ -7,13 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using DirectoryServiceAPI.Models;
 using DirectoryServiceAPI.Services;
-//using Microsoft.AspNetCore.Authorization;
 
 namespace DirectoryServiceAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("Directory")]
-    //[Authorize]
+    [Route("directory")]
     public class DirectoryController : Controller
     {
         internal static class RouteNames
@@ -135,7 +133,7 @@ namespace DirectoryServiceAPI.Controllers
                 Log.Warning(ex, ex.Message);
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (UserBadRequestException ex)
+            catch (GroupBadRequestException ex)
             {
                 Log.Warning(ex, ex.Message);
                 return BadRequest();

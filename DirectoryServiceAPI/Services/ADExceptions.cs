@@ -54,4 +54,15 @@ namespace DirectoryServiceAPI.Services
             GroupId = groupId ?? string.Empty;
         }
     }
+
+    public class GroupBadRequestException : Exception
+    {
+        public string GroupId { get; private set; }
+
+        public GroupBadRequestException()
+            : base("Bad Request")
+        {
+
+        }
+    }
 }

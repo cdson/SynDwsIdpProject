@@ -9,8 +9,8 @@ namespace DirectoryServiceAPI.Services
   
     public class ADFactory : IADFactory //Concrete Creator
     {
-        private readonly IGraphService graphService;
-        public ADFactory(IGraphService graphService)
+        private readonly IMicrosoftGraphService graphService;
+        public ADFactory(IMicrosoftGraphService graphService)
         {
             this.graphService = graphService;
         }

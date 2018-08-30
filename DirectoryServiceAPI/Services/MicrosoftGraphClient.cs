@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public class GraphClient : IGraphClient
+    public class MicrosoftGraphClient : IMicrosoftGraphClient
     {
         private GraphServiceClient graphClient;
         private IConfiguration configuration;
@@ -23,7 +23,7 @@ namespace DirectoryServiceAPI.Services
         private string graphAPIEndpoint;
         private string authority;
         
-        public GraphClient(IConfiguration configuration)
+        public MicrosoftGraphClient(IConfiguration configuration)
         {
             this.configuration = configuration;
             // Set AzureAD options

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public interface IGraphService
+    public interface IMicrosoftGraphService
     {
         Task<User> GetUser(string id);
         Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy);

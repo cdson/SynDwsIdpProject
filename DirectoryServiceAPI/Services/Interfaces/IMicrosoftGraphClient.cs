@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public interface IGraphClient
+    public interface IMicrosoftGraphClient
     {
         Task<GraphServiceClient> GetGraphServiceClient();
     }

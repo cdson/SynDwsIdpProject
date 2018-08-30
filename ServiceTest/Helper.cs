@@ -21,5 +21,19 @@ namespace ServiceTest
             expected.resources = users;
             return expected;
         }
+
+        public static Group CreateGroup()
+        {
+            Group expected = new Group() { id = "722fd891-fe44-4bd1-b529-963f573ec969", displayName = "TestGroup1" };
+            return expected;
+        }
+
+        public static GroupResources CreateGroupResources()
+        {
+            List<Group> groups = new List<Group>() { new Group() { id = "722fd891-fe44-4bd1-b529-963f573ec969", displayName= "TestGroup1" }, new Group() { id = "1986e105-886b-43b3-a1ff-cb2d89e04b9f", displayName = "TestGroup2" } };
+            GroupResources expected = new GroupResources();
+            expected.resources = groups;
+            return expected;
+        }
     }
 }

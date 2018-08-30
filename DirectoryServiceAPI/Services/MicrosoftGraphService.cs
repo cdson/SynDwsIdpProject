@@ -6,14 +6,15 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public class GraphService : IGraphService
+    public class MicrosoftGraphService : IMicrosoftGraphService
     {
-        private readonly IGraphClient graphClient;
-        public GraphService(IGraphClient graphClient)
+        private readonly IMicrosoftGraphClient graphClient;
+        public MicrosoftGraphService(IMicrosoftGraphClient graphClient)
         {
             this.graphClient = graphClient;
         }
@@ -37,10 +38,10 @@ namespace DirectoryServiceAPI.Services
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower().Equals("notfound")) ////"error":{"code": "Request_ResourceNotFound"}////
+                if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
                     Log.Warning(ex.Message);
-                    throw new UserNotFoundException(id);
+                    throw new NotFoundException();
                 }
                 else
                 {
@@ -70,26 +71,19 @@ namespace DirectoryServiceAPI.Services
                 }
                 users.totalResults = users.resources.Count;
 
-
-                if (users.totalResults == 0)
-                {
-                    Log.Warning("No user found.");
-                    throw new UserNotFoundException();
-                }
-
                 return users;
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower().Equals("badrequest"))
+                if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
                     Log.Warning(ex.Message);
-                    throw new UserBadRequestException();
+                    throw new BadRequestException();
                 }
-                else if (ex.StatusCode.ToString().ToLower().Equals("notfound"))
+                else if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
                     Log.Warning(ex.Message);
-                    throw new UserNotFoundException();
+                    throw new NotFoundException();
                 }
                 else
                 {
@@ -117,10 +111,10 @@ namespace DirectoryServiceAPI.Services
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower().Equals("badrequest")) ////"error":{"code": "Request_BadRequest"}////
+                if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
                     Log.Warning(ex.Message);
-                    throw new GroupNotFoundException(id);
+                    throw new NotFoundException();
                 }
                 else
                 {
@@ -150,26 +144,19 @@ namespace DirectoryServiceAPI.Services
                 }
                 groups.totalResults = groups.resources.Count;
 
-
-                if (groups.totalResults == 0)
-                {
-                    Log.Warning("No group found.");
-                    throw new GroupNotFoundException();
-                }
-
                 return groups;
             }
             catch (ServiceException ex)
             {
-                if (ex.StatusCode.ToString().ToLower().Equals("badrequest"))
+                if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
                     Log.Warning(ex.Message);
-                    throw new GroupBadRequestException();
+                    throw new BadRequestException();
                 }
-                else if (ex.StatusCode.ToString().ToLower().Equals("notfound"))
+                else if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
                     Log.Warning(ex.Message);
-                    throw new GroupNotFoundException();
+                    throw new NotFoundException();
                 }
                 else
                 {

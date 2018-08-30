@@ -67,7 +67,7 @@ namespace ServiceTest.DirectoryManagement
 
 
         [Test]
-        public async Task Filter_NameEquals_Users()
+        public async Task FilterNameEqualsUsers()
         {
             UserResources expected = Helper.CreateUserResources();
             User expectedUser = expected.resources.Where(x => x.id == "8c09a9d1-f1a2-463b-bd0f-b10c51c437d0").SingleOrDefault();
@@ -82,7 +82,7 @@ namespace ServiceTest.DirectoryManagement
         }
 
         [Test]
-        public async Task Filter_NameStartsWith_Users()
+        public async Task FilterNameStartsWithUsers()
         {
             UserResources expected = Helper.CreateUserResources();
             User expectedUser = expected.resources.Where(x => x.id == "8c09a9d1-f1a2-463b-bd0f-b10c51c437d0").SingleOrDefault();
@@ -97,18 +97,109 @@ namespace ServiceTest.DirectoryManagement
         }
 
         [Test]
-        public async Task BadRequest_Users()
+        public async Task BadRequestUsers()
         {
             HttpResponseMessage response = await Startup.Client.GetAsync("directory/users?filter=startswith(test,'S')");
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Test]
-        public async Task NoContent_Users()
+        public async Task NoContentUsers()
         {
             HttpResponseMessage response = await Startup.Client.GetAsync("directory/users?filter=givenName eq 'test'");
             Assert.IsTrue(response.IsSuccessStatusCode);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var userRes = JsonConvert.DeserializeObject<UserResources>(res);
+            Assert.AreEqual(0, userRes.totalResults);
+        }
+
+        #endregion
+
+        #region GetGroup
+
+        [Test]
+        public async Task ValidGroup()
+        {
+            Group expected = Helper.CreateGroup();
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups/" + expected.id);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var group = JsonConvert.DeserializeObject<Group>(res);
+            Assert.AreEqual(expected.displayName, group.displayName);
+        }
+
+        [Test]
+        public async Task GroupNotFound404()
+        {
+            HttpResponseMessage Res = await Startup.Client.GetAsync("directory/groups/1");
+            Assert.AreEqual(HttpStatusCode.NotFound, Res.StatusCode);
+        }
+
+        #endregion
+
+        #region GetGroups
+
+        [Test]
+        public async Task ValidGroups()
+        {
+            GroupResources expected = Helper.CreateGroupResources();
+            Group expectedGroup= expected.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups");
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var grpRes = JsonConvert.DeserializeObject<GroupResources>(res);
+            Group resultGroup = grpRes.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            resultGroup.Should().BeEquivalentTo(expectedGroup);
+        }
+
+
+        [Test]
+        public async Task FilterNameEqualsGroups()
+        {
+            GroupResources expected = Helper.CreateGroupResources();
+            Group expectedGroup = expected.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups?filter=displayName eq 'TestGroup1'");
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var grpRes = JsonConvert.DeserializeObject<GroupResources>(res);
+            Group resultGroup = grpRes.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            resultGroup.Should().BeEquivalentTo(expectedGroup);
+        }
+
+        [Test]
+        public async Task FilterNameStartsWithGroups()
+        {
+            GroupResources expected = Helper.CreateGroupResources();
+            Group expectedGroup = expected.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups?filter=startswith(displayName,'T')");
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var grpRes = JsonConvert.DeserializeObject<GroupResources>(res);
+            Group resultGroup = grpRes.resources.Where(x => x.id == "722fd891-fe44-4bd1-b529-963f573ec969").SingleOrDefault();
+
+            resultGroup.Should().BeEquivalentTo(expectedGroup);
+        }
+
+        [Test]
+        public async Task BadRequestGroups()
+        {
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups?filter=startswith(test,'S')");
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Test]
+        public async Task NoContentGroups()
+        {
+            HttpResponseMessage response = await Startup.Client.GetAsync("directory/groups?filter=displayName eq 'test'");
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var res = response.Content.ReadAsStringAsync().Result;
+            var grpRes = JsonConvert.DeserializeObject<GroupResources>(res);
+            Assert.AreEqual(0, grpRes.totalResults);
         }
 
         #endregion

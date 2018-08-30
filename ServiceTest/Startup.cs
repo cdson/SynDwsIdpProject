@@ -41,8 +41,8 @@ namespace ServiceTest
         {
             TestServer server = new TestServer(new WebHostBuilder()
                    .ConfigureTestServices(s => s.AddSingleton<IADFactory, ADFactory>())
-                   .ConfigureTestServices(s => s.AddSingleton<IGraphClient, GraphClient>())
-                   .ConfigureTestServices(s => s.AddSingleton<IGraphService, GraphService>())
+                   .ConfigureTestServices(s => s.AddSingleton<IMicrosoftGraphClient, MicrosoftGraphClient>())
+                   .ConfigureTestServices(s => s.AddSingleton<IMicrosoftGraphService, MicrosoftGraphService>())
                    .UseStartup<DirectoryServiceAPI.Startup>()
                    .UseConfiguration(Configuration));
             return server.CreateClient();

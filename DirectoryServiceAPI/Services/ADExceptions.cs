@@ -10,57 +10,17 @@ using DirectoryServiceAPI.Models;
 namespace DirectoryServiceAPI.Services
 {
 
-    public class UserNotFoundException : Exception
+    public class NotFoundException : Exception
     {
-        public string UserId { get; private set; }
-
-        public UserNotFoundException()
-            : base("No users found")
-        {
-
-        }
-
-        public UserNotFoundException(string userId)
-            : base("No user found for UserId")
-        {
-            UserId = userId ?? string.Empty;
-        }
-    }
-
-    public class UserBadRequestException : Exception
-    {
-        public string UserId { get; private set; }
-
-        public UserBadRequestException()
-            : base("Bad Request")
+        public NotFoundException() : base("Not found")
         {
 
         }
     }
 
-    public class GroupNotFoundException : Exception
+    public class BadRequestException : Exception
     {
-        public string GroupId { get; private set; }
-
-        public GroupNotFoundException()
-            : base("No groups found")
-        {
-
-        }
-
-        public GroupNotFoundException(string groupId)
-            : base("No group found for groupId")
-        {
-            GroupId = groupId ?? string.Empty;
-        }
-    }
-
-    public class GroupBadRequestException : Exception
-    {
-        public string GroupId { get; private set; }
-
-        public GroupBadRequestException()
-            : base("Bad Request")
+        public BadRequestException(): base("Bad Request")
         {
 
         }

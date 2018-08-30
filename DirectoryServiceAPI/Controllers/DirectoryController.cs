@@ -45,9 +45,9 @@ namespace DirectoryServiceAPI.Controllers
                 objUser = await adHandler.GetUser(id);
                 return Ok(objUser);
             }
-            catch (UserNotFoundException ex)
+            catch (NotFoundException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex, "User not found.");
                 return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
@@ -70,14 +70,14 @@ namespace DirectoryServiceAPI.Controllers
                 objUsers = await adHandler.GetUsers(filter, startIndex, count, sortBy);
                 return Ok(objUsers);
             }
-            catch (UserNotFoundException ex)
+            catch (NotFoundException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex, "Users not found.");
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (UserBadRequestException ex)
+            catch (BadRequestException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex.Message);
                 return BadRequest();
             }
             catch (Exception ex)
@@ -103,9 +103,9 @@ namespace DirectoryServiceAPI.Controllers
                 objGroup = await adHandler.GetGroup(id);
                 return Ok(objGroup);
             }
-            catch (GroupNotFoundException ex)
+            catch (NotFoundException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex, "Group not found.");
                 return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
@@ -128,14 +128,14 @@ namespace DirectoryServiceAPI.Controllers
                 objGroups = await adHandler.GetGroups(filter, startIndex, count, sortBy);
                 return Ok(objGroups);
             }
-            catch (GroupNotFoundException ex)
+            catch (NotFoundException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex, "Groups not found.");
                 return StatusCode(StatusCodes.Status204NoContent);
             }
-            catch (GroupBadRequestException ex)
+            catch (BadRequestException ex)
             {
-                Log.Warning(ex, ex.Message);
+                Log.Warning(ex.Message);
                 return BadRequest();
             }
             catch (Exception ex)

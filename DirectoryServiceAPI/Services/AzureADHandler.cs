@@ -9,8 +9,8 @@ namespace DirectoryServiceAPI.Services
 {
     public class AzureADHandler : IADHandler //Concrete Product , similar such product classes can be added
     {
-        private readonly IGraphService graphService;
-        public AzureADHandler(IGraphService graphService)
+        private readonly IMicrosoftGraphService graphService;
+        public AzureADHandler(IMicrosoftGraphService graphService)
         {
             this.graphService = graphService;
         }

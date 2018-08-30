@@ -20,7 +20,7 @@ namespace UnitTest.Controllers
         public void UserNotFound404()
         {
             Mock<IADHandler> v = new Mock<IADHandler>();
-            v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new UserNotFoundException("123abc"));
+            v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new NotFoundException());
 
             Mock<IADFactory> mockFactory = new Mock<IADFactory>();
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
@@ -66,7 +66,7 @@ namespace UnitTest.Controllers
         public void BadRequest()
         {
             Mock<IADHandler> v = new Mock<IADHandler>();
-            v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new UserBadRequestException());
+            v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new BadRequestException());
 
             Mock<IADFactory> mockFactory = new Mock<IADFactory>();
             mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);

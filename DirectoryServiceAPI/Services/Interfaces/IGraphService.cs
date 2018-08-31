@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DirectoryServiceAPI.Services
 {
-    public interface IADHandler
+    public interface IGraphService
     {
         Task<User> GetUser(string id);
         Task<UserResources> GetUsers(string filter, int? startIndex, int? count, string sortBy);

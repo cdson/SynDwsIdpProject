@@ -22,13 +22,13 @@ namespace DirectoryServiceAPI.Controllers
             public const string GroupById = nameof(GroupById);
         }
 
-        private readonly IADFactory factory;
+        private IGraphService graphService;
+        private string ADType = "AzureAD"; // We can get this in constructor as parameter , or we can query tenent service for the same.
 
-        public DirectoryController(IADFactory factory)
+        public DirectoryController(IGraphService graphService)
         {
-            this.factory = factory;
+            this.graphService = graphService != null ? graphService : ADFactory.GetIAM(ADType);
         }
-
 
         [HttpGet("users/{id}", Name = RouteNames.UserById)]
         public async Task<IActionResult> GetUser(string id)
@@ -40,9 +40,8 @@ namespace DirectoryServiceAPI.Controllers
                 {
                     return BadRequest();
                 }
-
-                IADHandler adHandler = factory.GetIAM();
-                objUser = await adHandler.GetUser(id);
+                
+                objUser = await graphService.GetUser(id);
                 return Ok(objUser);
             }
             catch (NotFoundException ex)
@@ -66,8 +65,7 @@ namespace DirectoryServiceAPI.Controllers
             UserResources objUsers = null;
             try
             {
-                IADHandler adHandler = factory.GetIAM();
-                objUsers = await adHandler.GetUsers(filter, startIndex, count, sortBy);
+                objUsers = await graphService.GetUsers(filter, startIndex, count, sortBy);
                 return Ok(objUsers);
             }
             catch (NotFoundException ex)
@@ -98,9 +96,8 @@ namespace DirectoryServiceAPI.Controllers
                 {
                     return BadRequest();
                 }
-
-                IADHandler adHandler = factory.GetIAM();
-                objGroup = await adHandler.GetGroup(id);
+                
+                objGroup = await graphService.GetGroup(id);
                 return Ok(objGroup);
             }
             catch (NotFoundException ex)
@@ -124,8 +121,7 @@ namespace DirectoryServiceAPI.Controllers
             GroupResources objGroups = null;
             try
             {
-                IADHandler adHandler = factory.GetIAM();
-                objGroups = await adHandler.GetGroups(filter, startIndex, count, sortBy);
+                objGroups = await graphService.GetGroups(filter, startIndex, count, sortBy);
                 return Ok(objGroups);
             }
             catch (NotFoundException ex)

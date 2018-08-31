@@ -10,27 +10,31 @@ using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public class MicrosoftGraphClient : IMicrosoftGraphClient
+    public static class MicrosoftGraphClient
     {
-        private GraphServiceClient graphClient;
-        private IConfiguration configuration;
+        private static GraphServiceClient graphClient;
+        private static IConfiguration configuration;
 
-        private string clientId;
-        private string clientSecret;
-        private string tenantId;
-        private string aadInstance;
-        private string graphResource;
-        private string graphAPIEndpoint;
-        private string authority;
+        private static string clientId;
+        private static string clientSecret;
+        private static string tenantId;
+        private static string aadInstance;
+        private static string graphResource;
+        private static string graphAPIEndpoint;
+        private static string authority;
         
-        public MicrosoftGraphClient(IConfiguration configuration)
+        static MicrosoftGraphClient()
         {
-            this.configuration = configuration;
-            // Set AzureAD options
+            configuration = new ConfigurationBuilder()
+            .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
             SetAzureADOptions();
         }
 
-        private void SetAzureADOptions()
+        private static void SetAzureADOptions()
         {
             var azureOptions = new AzureAD();
             configuration.Bind("AzureAD", azureOptions);
@@ -44,7 +48,7 @@ namespace DirectoryServiceAPI.Services
             authority = $"{aadInstance}{tenantId}";
         }
 
-        public async Task<GraphServiceClient> GetGraphServiceClient()
+        public static async Task<GraphServiceClient> GetGraphServiceClient()
         {
             // Get Access Token and Microsoft Graph Client using access token and microsoft graph v1.0 endpoint
             var delegateAuthProvider = await GetAuthProvider();
@@ -55,7 +59,7 @@ namespace DirectoryServiceAPI.Services
         }
 
 
-        private async Task<IAuthenticationProvider> GetAuthProvider()
+        private static async Task<IAuthenticationProvider> GetAuthProvider()
         {
             AuthenticationContext authenticationContext = new AuthenticationContext(authority);
             ClientCredential clientCred = new ClientCredential(clientId, clientSecret);

@@ -19,13 +19,10 @@ namespace UnitTest.Controllers
         [Test]
         public void GroupsNotFound204()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetGroups(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new NotFoundException());
-
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetGroups().Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status204NoContent, ((StatusCodeResult)response).StatusCode);
@@ -34,13 +31,10 @@ namespace UnitTest.Controllers
         [Test]
         public void InternalServerError()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetGroups(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new Exception());
-
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetGroups().Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status500InternalServerError, ((StatusCodeResult)response).StatusCode);
@@ -52,13 +46,10 @@ namespace UnitTest.Controllers
             var expected = new GroupResources();
             expected.resources = new List<Group>() { new Group() { id = "1", displayName = "Test group 1" }, new Group() { id = "2", displayName = "Test group 2" } };
 
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetGroups(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ReturnsAsync(expected);
-
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            
+            DirectoryController cn = new DirectoryController(v.Object);
             OkObjectResult response = cn.GetGroups().Result as OkObjectResult;
             expected.Should().BeEquivalentTo(response.Value);
         }
@@ -66,13 +57,10 @@ namespace UnitTest.Controllers
         [Test]
         public void BadRequest()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetGroups(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>())).ThrowsAsync(new BadRequestException());
-
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetGroups("test eq group1").Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status400BadRequest, ((StatusCodeResult)response).StatusCode);

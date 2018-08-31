@@ -6,27 +6,30 @@ using System.Linq;
 
 namespace DirectoryServiceAPI.Services
 {
-  
-    public class ADFactory : IADFactory //Concrete Creator
+    public class ADFactory
     {
-        private readonly IMicrosoftGraphService graphService;
-        public ADFactory(IMicrosoftGraphService graphService)
+        private static readonly MicrosoftGraphService microsoftGraphService;
+
+        static ADFactory()
         {
-            this.graphService = graphService;
+            if(microsoftGraphService == null)
+            {
+                microsoftGraphService = new MicrosoftGraphService();
+            }
         }
 
-        public IADHandler GetIAM()
+        public static IGraphService GetIAM(string Ad)
         {
-            return new AzureADHandler(graphService);
+            //return new AzureADHandler(graphService);
 
-            //switch (Ad) // get this from parameter
-            //{
-            //    case "AzureAD":
-            //        return new AzureADHandler();
-            //    default:
-            //        throw new ApplicationException(string.Format("IAM '{0}' is not found", Ad));
-            //}
+            switch (Ad)
+            {
+                case "AzureAD":
+                    return microsoftGraphService;
+                default:
+                    throw new NotImplementedException(string.Format("IAM '{0}' not found", Ad));
+            }
         }
-
     }
+
 }

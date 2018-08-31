@@ -1,6 +1,6 @@
 ﻿using DirectoryServiceAPI.Helpers;
 using DirectoryServiceAPI.Models;
-using Microsoft.AspNetCore.Http;
+using DirectoryServiceAPI.Services;
 using Microsoft.Graph;
 using Serilog;
 using System;
@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace DirectoryServiceAPI.Services
 {
-    public class MicrosoftGraphService : IMicrosoftGraphService
+    public class MicrosoftGraphService : IGraphService //Concrete Product , similar such product classes can be added
     {
-        private readonly IMicrosoftGraphClient graphClient;
-        public MicrosoftGraphService(IMicrosoftGraphClient graphClient)
-        {
-            this.graphClient = graphClient;
-        }
+        //private readonly MicrosoftGraphClient graphClient;
+        //public AzureADHandler()
+        //{
+        //    this.graphClient = MicrosoftGraphClient.graphClient;
+        //}
 
         public async Task<Models.User> GetUser(string id)
         {
@@ -26,7 +26,7 @@ namespace DirectoryServiceAPI.Services
                 Models.User objUser = new Models.User();
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+                GraphServiceClient client = await MicrosoftGraphClient.GetGraphServiceClient();
 
                 // Load user profile.
                 var user = await client.Users[id].Request().GetAsync();
@@ -58,7 +58,7 @@ namespace DirectoryServiceAPI.Services
                 users.resources = new List<Models.User>();
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+                GraphServiceClient client = await MicrosoftGraphClient.GetGraphServiceClient();
 
                 // Load users profiles.
                 var userList = await client.Users.Request().Filter($"{filter}").GetAsync();
@@ -99,7 +99,7 @@ namespace DirectoryServiceAPI.Services
                 Models.Group objGroup = new Models.Group();
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+                GraphServiceClient client = await MicrosoftGraphClient.GetGraphServiceClient();
 
                 // Load group profile.
                 var group = await client.Groups[id].Request().GetAsync();
@@ -131,7 +131,7 @@ namespace DirectoryServiceAPI.Services
                 groups.resources = new List<Models.Group>();
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient client = await graphClient.GetGraphServiceClient();
+                GraphServiceClient client = await MicrosoftGraphClient.GetGraphServiceClient();
 
                 // Load groups profiles.
                 var groupList = await client.Groups.Request().Filter($"{filter}").GetAsync();

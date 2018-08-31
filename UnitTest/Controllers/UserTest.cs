@@ -19,13 +19,10 @@ namespace UnitTest.Controllers
         [Test]
         public void UserNotFound404()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new NotFoundException());
 
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetUser("123abc").Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status404NotFound, ((StatusCodeResult)response).StatusCode);
@@ -34,13 +31,10 @@ namespace UnitTest.Controllers
         [Test]
         public void InternalServerError()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new Exception());
 
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetUser("123abc").Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status500InternalServerError, ((StatusCodeResult)response).StatusCode);
@@ -51,13 +45,10 @@ namespace UnitTest.Controllers
         {
             var expected = new User() { id = "123456abc", email = "abc@abc.com", givenName = "abc", surname = "abc", userPrincipalName = "abc" };
 
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetUser(It.IsAny<string>())).ReturnsAsync(expected);
 
-            Mock <IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            DirectoryController cn = new DirectoryController(v.Object);
             OkObjectResult response = cn.GetUser("123456abc").Result as OkObjectResult;
             expected.Should().BeEquivalentTo(response.Value);
         }
@@ -65,13 +56,10 @@ namespace UnitTest.Controllers
         [Test]
         public void BadRequest()
         {
-            Mock<IADHandler> v = new Mock<IADHandler>();
+            Mock<IGraphService> v = new Mock<IGraphService>();
             v.Setup(k => k.GetUser(It.IsAny<string>())).ThrowsAsync(new BadRequestException());
 
-            Mock<IADFactory> mockFactory = new Mock<IADFactory>();
-            mockFactory.Setup(k => k.GetIAM()).Returns(v.Object);
-
-            DirectoryController cn = new DirectoryController(mockFactory.Object);
+            DirectoryController cn = new DirectoryController(v.Object);
             IActionResult response = cn.GetUser("").Result;
             Assert.IsInstanceOf<StatusCodeResult>(response);
             Assert.AreEqual(StatusCodes.Status400BadRequest, ((StatusCodeResult)response).StatusCode);
